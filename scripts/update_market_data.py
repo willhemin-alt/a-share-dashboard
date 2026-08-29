@@ -9,6 +9,7 @@ explicit simulated execution.
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import math
 from datetime import datetime
@@ -22,6 +23,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 DASHBOARD_PATH = ROOT / "data" / "dashboard.json"
+PORTFOLIO_PATH = ROOT / "data" / "portfolio_state.json"
+POSITIONS_PATH = ROOT / "data" / "positions.csv"
+HISTORY_PATH = ROOT / "data" / "account_history.json"
 BEIJING = ZoneInfo("Asia/Shanghai")
 LUXEMBOURG = ZoneInfo("Europe/Luxembourg")
 
@@ -99,9 +103,9 @@ def update_watchlist(snapshot: dict[str, Any], stock_frame: pd.DataFrame) -> Non
     amount_col = pick_column(stock_frame, "成交额")
 
     rows_by_code = {
-        str(row[code_col]).strip().zfill(6): row
+        normalize_code(row[code_col]): row
         for _, row in stock_frame.iterrows()
-        if str(row[code_col]).strip().zfill(6) in WATCH_CODES
+        if normalize_code(row[code_col]) in WATCH_CODES
     }
     for stock in snapshot["watchlist"]:
         row = rows_by_code.get(stock["code"])
@@ -110,6 +114,117 @@ def update_watchlist(snapshot: dict[str, Any], stock_frame: pd.DataFrame) -> Non
         stock["price"] = f"{number(row[price_col]):.2f}"
         stock["change"] = signed_pct(row[change_col])
         stock["turnover"] = amount_yi(row[amount_col])
+
+
+def normalize_code(value: Any) -> str:
+    text = str(value).strip()
+    if text.endswith(".0"):
+        text = text[:-2]
+    return text.zfill(6)
+
+
+def update_portfolios(stock_frame: pd.DataFrame, now: datetime) -> dict[str, Any]:
+    portfolio = json.loads(PORTFOLIO_PATH.read_text(encoding="utf-8"))
+    code_col = pick_column(stock_frame, "代码", "序号")
+    price_col = pick_column(stock_frame, "最新价")
+    rows_by_code = {
+        normalize_code(row[code_col]): row
+        for _, row in stock_frame.iterrows()
+    }
+    position_rows: list[dict[str, Any]] = []
+    updated_utc = now.astimezone(ZoneInfo("UTC")).isoformat(timespec="seconds")
+
+    for account in portfolio["accounts"]:
+        market_value = 0.0
+        holdings = account.get("holdings", [])
+        for holding in holdings:
+            row = rows_by_code.get(holding["symbol"])
+            if row is not None:
+                holding["last_price"] = round(number(row[price_col]), 4)
+            holding["market_value"] = round(
+                holding["quantity"] * holding["last_price"], 2
+            )
+            holding["unrealized_pnl"] = round(
+                holding["market_value"]
+                - holding["quantity"] * holding["average_cost"],
+                2,
+            )
+            market_value += holding["market_value"]
+            position_rows.append(
+                {
+                    "account_id": account["id"],
+                    "symbol": holding["symbol"],
+                    "name": holding["name"],
+                    "quantity": holding["quantity"],
+                    "average_cost": holding["average_cost"],
+                    "last_price": holding["last_price"],
+                    "market_value": holding["market_value"],
+                    "unrealized_pnl": holding["unrealized_pnl"],
+                    "updated_at_utc": updated_utc,
+                }
+            )
+        account["positions"] = len(holdings)
+        account["market_value"] = round(market_value, 2)
+        account["equity"] = round(account["cash"] + market_value, 2)
+        account["pnl"] = round(account["equity"] - account["initial_cash"], 2)
+        account["pnl_pct"] = round(
+            account["pnl"] / account["initial_cash"] * 100, 6
+        )
+
+    portfolio["updated_at"] = now.isoformat(timespec="seconds")
+    PORTFOLIO_PATH.write_text(
+        json.dumps(portfolio, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    with POSITIONS_PATH.open("w", encoding="utf-8", newline="") as handle:
+        fieldnames = [
+            "account_id", "symbol", "name", "quantity", "average_cost",
+            "last_price", "market_value", "unrealized_pnl", "updated_at_utc",
+        ]
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(position_rows)
+    return portfolio
+
+
+def update_account_history(portfolio: dict[str, Any], now: datetime) -> None:
+    history = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
+    account = next(
+        item for item in portfolio["accounts"] if item["id"] == history["account_id"]
+    )
+    if not account.get("holdings"):
+        return
+    holding = account["holdings"][0]
+    valuation = next(
+        (event for event in history["events"] if event["type"] == "valuation"),
+        None,
+    )
+    if valuation is None:
+        valuation = {"type": "valuation"}
+        history["events"].append(valuation)
+    valuation.update(
+        {
+            "date": now.date().isoformat(),
+            "title": "最近行情估值",
+            "action": "持有",
+            "symbol": holding["symbol"],
+            "name": holding["name"],
+            "quantity": holding["quantity"],
+            "price": holding["last_price"],
+            "gross_amount": holding["market_value"],
+            "fees": 0.0,
+            "cash_after": account["cash"],
+            "equity_after": account["equity"],
+            "note": (
+                "8月13日后无新增正式成交；累计盈亏为 "
+                f"{account['pnl']:+,.2f} 元（{account['pnl_pct']:+.2f}%）。"
+            ),
+        }
+    )
+    HISTORY_PATH.write_text(
+        json.dumps(history, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
 
 
 def update_tech(snapshot: dict[str, Any], board_frame: pd.DataFrame) -> None:
@@ -207,6 +322,8 @@ def update_snapshot(mode: str) -> None:
         json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
+    portfolio = update_portfolios(stock_frame, now)
+    update_account_history(portfolio, now)
     print(f"Updated {DASHBOARD_PATH} for {mode} at {now.isoformat()}")
 
 
