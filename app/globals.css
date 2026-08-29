@@ -207,6 +207,38 @@ nav a:hover { color: var(--cyan); }
 .next-action span { display: block; font-size: 8px; text-transform: uppercase; letter-spacing: .12em; }
 .next-action p { margin: 4px 0 0; font-size: 10px; line-height: 1.65; }
 
+.account-history { margin-top: 13px; border: 1px solid rgba(244,189,98,.2); border-radius: 18px; background: linear-gradient(150deg, rgba(34,32,22,.82), rgba(10,28,30,.88) 58%); overflow: hidden; }
+.history-head { display: flex; align-items: center; justify-content: space-between; padding: 18px 21px; border-bottom: 1px solid var(--line); }
+.history-head > div { display: flex; align-items: center; gap: 11px; }
+.history-head > div > span:last-child strong, .history-head > div > span:last-child small { display: block; }
+.history-head > div > span:last-child strong { font-size: 13px; }
+.history-head > div > span:last-child small { margin-top: 3px; color: #6f8784; font-size: 9px; }
+.history-icon { width: 36px; height: 36px; display: grid; place-items: center; color: var(--amber); background: var(--amber-soft); border-radius: 11px; }
+.history-icon svg { width: 17px; }
+.restored-badge { color: var(--amber); border-color: rgba(244,189,98,.25); background: var(--amber-soft); }
+.holding-strip { display: grid; grid-template-columns: 1.3fr .7fr .8fr .8fr 1.25fr; gap: 0; padding: 16px 20px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.016); }
+.holding-strip > div { min-width: 0; padding: 0 16px; border-right: 1px solid var(--line); }
+.holding-strip > div:first-child { padding-left: 0; }
+.holding-strip > div:last-child { border-right: 0; }
+.holding-strip span, .holding-strip strong { display: block; }
+.holding-strip span { color: #627b78; font-size: 8px; margin-bottom: 6px; }
+.holding-strip strong { font-size: 12px; font-weight: 560; }
+.holding-strip strong small { color: #607976; font-family: ui-monospace, monospace; font-size: 8px; }
+.profit-number { color: var(--red); }
+.history-table-wrap { overflow: hidden; }
+.history-table-wrap table { min-width: 1040px; }
+.history-table-wrap th { height: 40px; padding: 0 14px; color: #607976; background: rgba(255,255,255,.012); font-size: 8px; border-color: var(--line); }
+.history-table-wrap td { padding: 14px; color: #afc1be; font-size: 10px; border-color: var(--line); }
+.history-table-wrap tr:hover { background: rgba(244,189,98,.025); }
+.trade-badge { color: var(--amber); border-color: rgba(244,189,98,.25); }
+.valuation-badge { color: var(--cyan); border-color: rgba(53,230,196,.2); }
+.history-price strong, .history-price span { display: block; }
+.history-price strong { color: var(--ink); font-size: 11px; }
+.history-price span { margin-top: 4px; color: #627b78; font-size: 8px; }
+.history-note { min-width: 280px; margin: 0; color: #718986; line-height: 1.55; white-space: normal; }
+.history-foot { display: flex; align-items: center; gap: 8px; padding: 12px 20px; color: #6e8783; border-top: 1px solid var(--line); font-size: 9px; }
+.history-foot svg { width: 14px; color: var(--amber); }
+
 .ledger-card { scroll-margin-top: 20px; display: grid; grid-template-columns: 54px 1fr 1.1fr; gap: 20px; align-items: center; padding: 25px; margin: 42px 0; border: 1px solid rgba(53,230,196,.2); border-radius: 18px; background: linear-gradient(110deg, rgba(53,230,196,.08), rgba(10,30,32,.76) 55%); }
 .ledger-icon { width: 50px; height: 50px; display: grid; place-items: center; border-radius: 15px; background: var(--cyan-soft); color: var(--cyan); }
 .ledger-icon svg { width: 21px; }
@@ -257,6 +289,10 @@ footer p { margin: 0; }
   .theme-track { left: 82px; }
   .account-stats { grid-template-columns: 1fr 1fr; gap: 14px 0; }
   .account-stats div:nth-child(2) { border-right: 0; }
+  .holding-strip { grid-template-columns: 1fr 1fr; gap: 14px 0; }
+  .holding-strip > div { padding-left: 0; }
+  .holding-strip > div:nth-child(2n) { border-right: 0; padding-left: 14px; }
+  .holding-strip > div:last-child { grid-column: 1 / -1; border-top: 1px solid var(--line); padding-top: 13px; }
   .ledger-card { grid-template-columns: 1fr; }
   .ledger-status { grid-column: 1; }
   footer { align-items: flex-start; flex-direction: column; gap: 8px; }
