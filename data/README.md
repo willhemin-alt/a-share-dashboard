@@ -2,6 +2,7 @@
 
 - `dashboard.json`：最近一次市场快照，页面直接读取该文件。
 - `portfolio_state.json`：两个人民币 10 万元模拟账户的最新余额。
+- `account_history.json`：东博账户的正式建仓与最近一次估值记录。
 - `trades.csv`：正式成交台账。只有实际执行的模拟成交才写入。
 - `positions.csv`：持仓快照，由成交与最新价格计算。
 - `signals.csv`：策略筛选结果；信号不等于成交。
