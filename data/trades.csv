@@ -1,0 +1,1 @@
+trade_id,account_id,trade_date,trade_time_cst,side,symbol,name,price,quantity,gross_amount,fees,net_cash_change,reason,source_run_id,created_at_utc

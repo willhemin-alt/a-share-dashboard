@@ -1,0 +1,79 @@
+{
+  "as_of": "2026-08-28",
+  "session": "close",
+  "timezone": "Asia/Shanghai",
+  "headline": "市场放量仍在，科技内部开始分化。",
+  "summary": "指数冲高回落，但上涨家数仍占优。科技主线从硬件高位向 AI 应用与数据安全扩散，今天不追高，先看承接。",
+  "temperature": {
+    "score": 55,
+    "label": "中性偏谨慎",
+    "position_note": "控制追高，保留现金等待确认"
+  },
+  "breadth": {
+    "up": 3013,
+    "down": 2390
+  },
+  "indices": [
+    { "code": "000001", "name": "上证指数", "value": "3,952.18", "change": "-0.11%" },
+    { "code": "399001", "name": "深证成指", "value": "13,953.07", "change": "-0.68%" },
+    { "code": "399006", "name": "创业板指", "value": "3,424.40", "change": "-1.41%" },
+    { "code": "000688", "name": "科创50", "value": "1,662.15", "change": "-1.85%" }
+  ],
+  "turnover": {
+    "display": "2.12",
+    "unit": "万亿元",
+    "change_yi": -232,
+    "change_pct": "-1.07%"
+  },
+  "flows": {
+    "northbound": "逐日净额暂停披露",
+    "southbound": "约 +12 亿港元",
+    "note": "北向改看成交活跃度与定期持仓；南向净额为公开收盘口径。"
+  },
+  "tech_themes": [
+    { "name": "AI 应用", "score": 82, "status": "逆势活跃", "note": "星网锐捷、天融信、税友股份涨停", "tone": "hot" },
+    { "name": "数据安全", "score": 74, "status": "热度上升", "note": "应用端强于硬件端，资金向低位扩散", "tone": "warm" },
+    { "name": "算力硬件", "score": 46, "status": "高位分化", "note": "冲高回落，部分高位股负反馈明显", "tone": "cool" },
+    { "name": "半导体", "score": 38, "status": "短线降温", "note": "板块居跌幅前列，等待企稳信号", "tone": "cool" }
+  ],
+  "watchlist": [
+    {
+      "code": "000568",
+      "name": "泸州老窖",
+      "price": "78.44",
+      "change": "+1.20%",
+      "dividend_yield": "7.05%",
+      "turnover": "7.91 亿",
+      "flow": "+908 万",
+      "verdict": "观察",
+      "reason": "估值与股息率进入吸引区，但中报盈利承压，先看缩量企稳。"
+    },
+    {
+      "code": "600036",
+      "name": "招商银行",
+      "price": "39.35",
+      "change": "-0.58%",
+      "dividend_yield": "5.09%",
+      "turnover": "待更新",
+      "flow": "待更新",
+      "verdict": "持有观察",
+      "reason": "高股息与零售银行底盘仍在，关注息差与资产质量变化。"
+    },
+    {
+      "code": "600900",
+      "name": "长江电力",
+      "price": "28.05",
+      "change": "-0.18%",
+      "dividend_yield": "3.54%",
+      "turnover": "18.87 亿",
+      "flow": "融资余额升",
+      "verdict": "防守观察",
+      "reason": "现金流稳定，适合作为防守底仓；当前更看重分红持续性。"
+    }
+  ],
+  "sources": [
+    "中国经济网 / 央广网：指数、成交额与涨跌家数",
+    "搜狐证券 / 新浪财经：重点关注股收盘行情",
+    "港交所及公开市场数据：互联互通资金"
+  ]
+}
