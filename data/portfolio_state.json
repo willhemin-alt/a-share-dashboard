@@ -13,21 +13,35 @@
       "pnl": 0.0,
       "pnl_pct": 0.0,
       "positions": 0,
+      "holdings": [],
       "next": "下个交易日 09:35 检查昨日强势股承接；14:50 决定是否买入。",
       "color": "cyan"
     },
     {
       "id": "dongbo",
       "name": "东博老股民实验账户",
-      "tag": "低估 / 分散 / 耐心",
+      "tag": "低估 / 集中 / 长期持有",
       "initial_cash": 100000.0,
-      "cash": 100000.0,
-      "market_value": 0.0,
-      "equity": 100000.0,
-      "pnl": 0.0,
-      "pnl_pct": 0.0,
-      "positions": 0,
-      "next": "继续等待估值与安全边际同时满足，不为建仓而建仓。",
+      "cash": 3045.92,
+      "market_value": 98375.0,
+      "equity": 101420.92,
+      "pnl": 1420.92,
+      "pnl_pct": 1.42092,
+      "positions": 1,
+      "holdings": [
+        {
+          "symbol": "600036",
+          "name": "招商银行",
+          "quantity": 2500,
+          "entry_price": 38.77,
+          "average_cost": 38.781632,
+          "last_price": 39.35,
+          "market_value": 98375.0,
+          "unrealized_pnl": 1420.92,
+          "entry_date": "2026-08-13"
+        }
+      ],
+      "next": "继续持有招商银行，跟踪息差、资产质量与股息率；没有新的正式成交前不改动持仓。",
       "color": "amber"
     }
   ]
