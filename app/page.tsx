@@ -8,7 +8,9 @@ import {
   CircleDollarSign,
   Database,
   Flame,
+  History,
   Landmark,
+  ReceiptText,
   RefreshCw,
   ShieldCheck,
   Sparkles,
@@ -29,6 +31,7 @@ import {
 } from "@/components/ui/table";
 
 import dashboardData from "@/data/dashboard.json";
+import accountHistory from "@/data/account_history.json";
 import portfolioState from "@/data/portfolio_state.json";
 
 const formatMoney = (value: number) =>
@@ -68,6 +71,9 @@ const accounts = portfolioState.accounts.map((account) => ({
 }));
 const totalCash = portfolioState.accounts.reduce((sum, account) => sum + account.cash, 0);
 const totalPositions = portfolioState.accounts.reduce((sum, account) => sum + account.positions, 0);
+const formalTrades = accountHistory.events.filter((event) => event.type === "trade").length;
+const dongboAccount = portfolioState.accounts.find((account) => account.id === "dongbo");
+const dongboHolding = dongboAccount?.holdings[0];
 
 function Change({ value }: { value: string }) {
   const positive = value.trim().startsWith("+");
@@ -169,11 +175,38 @@ export default function Home() {
             <div className="account-stats"><div><span>可用现金</span><strong>{account.cashLabel}</strong></div><div><span>持仓市值</span><strong>{account.marketValueLabel}</strong></div><div><span>持仓数</span><strong>{account.positions}</strong></div><div><span>累计盈亏</span><strong>{account.pnlLabel}</strong></div></div>
             <div className="next-action"><Zap /><div><span>下一步</span><p>{account.next}</p></div></div>
           </article>)}</div>
+
+          {dongboAccount && dongboHolding ? <article className="account-history">
+            <div className="history-head">
+              <div><span className="history-icon"><History /></span><span><strong>东博账户历史记录</strong><small>已从此前实验账户报告恢复</small></span></div>
+              <Badge className="restored-badge" variant="outline">1 笔正式成交</Badge>
+            </div>
+            <div className="holding-strip">
+              <div><span>当前持仓</span><strong>{dongboHolding.name} <small>{dongboHolding.symbol}</small></strong></div>
+              <div><span>数量</span><strong>{dongboHolding.quantity.toLocaleString("zh-CN")} 股</strong></div>
+              <div><span>含费成本</span><strong>¥{dongboHolding.average_cost.toFixed(4)}</strong></div>
+              <div><span>8月28日收盘</span><strong>¥{dongboHolding.last_price.toFixed(2)}</strong></div>
+              <div><span>累计盈亏</span><strong className="profit-number">+{formatMoney(dongboAccount.pnl)} · +{dongboAccount.pnl_pct.toFixed(2)}%</strong></div>
+            </div>
+            <div className="history-table-wrap"><Table>
+              <TableHeader><TableRow><TableHead>日期</TableHead><TableHead>记录</TableHead><TableHead>标的</TableHead><TableHead>价格 / 数量</TableHead><TableHead>金额 / 费用</TableHead><TableHead>账户总资产</TableHead><TableHead>说明</TableHead></TableRow></TableHeader>
+              <TableBody>{accountHistory.events.map((event) => <TableRow key={`${event.date}-${event.type}`}>
+                <TableCell>{event.date}</TableCell>
+                <TableCell><Badge className={event.type === "trade" ? "trade-badge" : "valuation-badge"} variant="outline">{event.title}</Badge></TableCell>
+                <TableCell><div className="stock-name"><strong>{event.name}</strong><span>{event.symbol}</span></div></TableCell>
+                <TableCell><div className="history-price"><strong>¥{event.price.toFixed(2)}</strong><span>{event.quantity.toLocaleString("zh-CN")} 股</span></div></TableCell>
+                <TableCell><div className="history-price"><strong>{formatMoney(event.gross_amount)}</strong><span>费用 {formatMoney(event.fees)}</span></div></TableCell>
+                <TableCell><strong>{formatMoney(event.equity_after)}</strong></TableCell>
+                <TableCell><p className="history-note">{event.note}</p></TableCell>
+              </TableRow>)}</TableBody>
+            </Table></div>
+            <div className="history-foot"><ReceiptText /> 2026年8月13日之后未找到新增正式成交；行情更新会继续按最新价格重估这 2,500 股。</div>
+          </article> : null}
         </section>
 
         <section id="ledger" className="ledger-card">
           <div className="ledger-icon"><Database /></div>
-          <div className="ledger-copy"><Badge variant="outline">永久台账</Badge><h2>正式记录从第一笔成交开始</h2><p>初始本金合计 ¥200,000.00；当前 0 笔正式交易、{totalPositions} 个持仓。每笔交易将保留策略、理由、价格、数量、费用和盈亏。</p></div>
+          <div className="ledger-copy"><Badge variant="outline">永久台账</Badge><h2>历史成交已经恢复</h2><p>初始本金合计 ¥200,000.00；当前 {formalTrades} 笔正式交易、{totalPositions} 个持仓。每笔交易保留策略、理由、价格、数量、费用和盈亏。</p></div>
           <div className="ledger-status"><div><BookOpenCheck /><span>账本状态</span><strong>已初始化</strong></div><div><CircleDollarSign /><span>现金余额</span><strong>{formatMoney(totalCash)}</strong></div><div><Landmark /><span>正式持仓</span><strong>{totalPositions}</strong></div></div>
         </section>
 
