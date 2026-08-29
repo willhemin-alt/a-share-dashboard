@@ -1,0 +1,36 @@
+{
+  "account_id": "dongbo",
+  "restored_at": "2026-08-29T16:30:00Z",
+  "events": [
+    {
+      "date": "2026-08-13",
+      "type": "trade",
+      "title": "正式模拟建仓",
+      "action": "买入",
+      "symbol": "600036",
+      "name": "招商银行",
+      "quantity": 2500,
+      "price": 38.77,
+      "gross_amount": 96925.0,
+      "fees": 29.08,
+      "cash_after": 3045.92,
+      "equity_after": 99970.92,
+      "note": "按当日收盘价模拟买入；集中、接近满仓、低估值、长期持有。"
+    },
+    {
+      "date": "2026-08-28",
+      "type": "valuation",
+      "title": "最近收盘估值",
+      "action": "持有",
+      "symbol": "600036",
+      "name": "招商银行",
+      "quantity": 2500,
+      "price": 39.35,
+      "gross_amount": 98375.0,
+      "fees": 0.0,
+      "cash_after": 3045.92,
+      "equity_after": 101420.92,
+      "note": "8月13日后未找到新增正式成交；累计盈亏为 +1,420.92 元（+1.42%）。"
+    }
+  ]
+}
