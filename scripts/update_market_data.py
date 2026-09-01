@@ -12,7 +12,7 @@ import argparse
 import csv
 import json
 import math
-import time
+import time as time_module
 from datetime import datetime, time
 from pathlib import Path
 from typing import Any
@@ -315,7 +315,7 @@ def fetch_market_frames() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
             last_error = exc
             print(f"Market data attempt {attempt}/3 failed: {exc}")
             if attempt < 3:
-                time.sleep(attempt * 10)
+                time_module.sleep(attempt * 10)
     assert last_error is not None
     raise last_error
 
