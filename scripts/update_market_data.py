@@ -12,6 +12,7 @@ import argparse
 import csv
 import json
 import math
+import time
 from datetime import datetime, time
 from pathlib import Path
 from typing import Any
@@ -302,11 +303,33 @@ def derive_summary(snapshot: dict[str, Any], index_changes: list[float]) -> None
     )
 
 
+def fetch_market_frames() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    last_error: Exception | None = None
+    for attempt in range(1, 4):
+        try:
+            stock_frame = ak.stock_zh_a_spot_em()
+            index_frame = ak.stock_zh_index_spot_em()
+            board_frame = ak.stock_board_concept_name_em()
+            return stock_frame, index_frame, board_frame
+        except Exception as exc:
+            last_error = exc
+            print(f"Market data attempt {attempt}/3 failed: {exc}")
+            if attempt < 3:
+                time.sleep(attempt * 10)
+    assert last_error is not None
+    raise last_error
+
+
 def update_snapshot(mode: str) -> None:
     snapshot = load_snapshot()
-    stock_frame = ak.stock_zh_a_spot_em()
-    index_frame = ak.stock_zh_index_spot_em()
-    board_frame = ak.stock_board_concept_name_em()
+    try:
+        stock_frame, index_frame, board_frame = fetch_market_frames()
+    except Exception as exc:
+        print(
+            "Market data remained unavailable after three attempts; "
+            f"keeping the last verified dashboard snapshot. Error: {exc}"
+        )
+        return
 
     price_change_col = pick_column(stock_frame, "涨跌幅")
     stock_changes = pd.to_numeric(stock_frame[price_change_col], errors="coerce")
