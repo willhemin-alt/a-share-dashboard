@@ -121,6 +121,8 @@ def normalize_code(value: Any) -> str:
     text = str(value).strip()
     if text.endswith(".0"):
         text = text[:-2]
+    if len(text) == 8 and text[:2].lower() in {"sh", "sz", "bj"}:
+        text = text[2:]
     return text.zfill(6)
 
 
@@ -303,27 +305,36 @@ def derive_summary(snapshot: dict[str, Any], index_changes: list[float]) -> None
     )
 
 
-def fetch_market_frames() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+def fetch_market_frames() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, str]:
     last_error: Exception | None = None
-    for attempt in range(1, 4):
+    for attempt in range(1, 3):
         try:
             stock_frame = ak.stock_zh_a_spot_em()
             index_frame = ak.stock_zh_index_spot_em()
             board_frame = ak.stock_board_concept_name_em()
-            return stock_frame, index_frame, board_frame
+            return stock_frame, index_frame, board_frame, "东方财富"
         except Exception as exc:
             last_error = exc
-            print(f"Market data attempt {attempt}/3 failed: {exc}")
-            if attempt < 3:
-                time_module.sleep(attempt * 10)
+            print(f"Eastmoney attempt {attempt}/2 failed: {exc}")
+            if attempt < 2:
+                time_module.sleep(10)
+
+    try:
+        print("Switching to Sina market data fallback.")
+        stock_frame = ak.stock_zh_a_spot()
+        index_frame = ak.stock_zh_index_spot_sina()
+        return stock_frame, index_frame, pd.DataFrame(), "新浪财经（备用源）"
+    except Exception as exc:
+        last_error = exc
+        print(f"Sina fallback failed: {exc}")
+
     assert last_error is not None
     raise last_error
-
 
 def update_snapshot(mode: str) -> None:
     snapshot = load_snapshot()
     try:
-        stock_frame, index_frame, board_frame = fetch_market_frames()
+        stock_frame, index_frame, board_frame, data_source = fetch_market_frames()
     except Exception as exc:
         print(
             "Market data remained unavailable after three attempts; "
@@ -344,7 +355,8 @@ def update_snapshot(mode: str) -> None:
 
     index_changes = update_indices(snapshot, index_frame)
     update_watchlist(snapshot, stock_frame)
-    update_tech(snapshot, board_frame)
+    if not board_frame.empty:
+        update_tech(snapshot, board_frame)
     derive_summary(snapshot, index_changes)
 
     now = datetime.now(BEIJING)
@@ -353,6 +365,10 @@ def update_snapshot(mode: str) -> None:
     snapshot["session_time"] = now.strftime("%H:%M")
     snapshot["timezone"] = "Asia/Shanghai"
     snapshot["generated_at"] = now.isoformat(timespec="seconds")
+    snapshot["data_source"] = data_source
+    snapshot["tech_data_status"] = (
+        "已更新" if not board_frame.empty else "备用源不含板块数据，沿用上一版"
+    )
     DASHBOARD_PATH.write_text(
         json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
