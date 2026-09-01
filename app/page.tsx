@@ -40,6 +40,8 @@ const formatMoney = (value: number) =>
     currency: "CNY",
     minimumFractionDigits: 2,
   }).format(value);
+const formatSignedMoney = (value: number) =>
+  `${value >= 0 ? "+" : "-"}${formatMoney(Math.abs(value))}`;
 
 const asOfDate = new Date(`${dashboardData.as_of}T12:00:00+08:00`);
 const fullDate = new Intl.DateTimeFormat("zh-CN", {
@@ -58,6 +60,11 @@ const sessionLabels: Record<string, string> = {
   manual: "手动更新",
 };
 const sessionLabel = sessionLabels[dashboardData.session] ?? dashboardData.session;
+const sessionTime = "session_time" in dashboardData ? dashboardData.session_time : "";
+const sessionDisplay = `${sessionLabel}${sessionTime ? ` · ${sessionTime}` : ""}`;
+const isMorningSnapshot = dashboardData.session === "luxembourg-morning";
+const priceColumnLabel = isMorningSnapshot ? "上午收盘 / 涨跌" : "收盘 / 涨跌";
+const marketSnapshotLabel = isMorningSnapshot ? "上午盘快照" : "收盘快照";
 const indices = dashboardData.indices;
 const techThemes = dashboardData.tech_themes;
 const watchlist = dashboardData.watchlist;
@@ -72,6 +79,7 @@ const accounts = portfolioState.accounts.map((account) => ({
 const totalCash = portfolioState.accounts.reduce((sum, account) => sum + account.cash, 0);
 const totalPositions = portfolioState.accounts.reduce((sum, account) => sum + account.positions, 0);
 const formalTrades = accountHistory.events.filter((event) => event.type === "trade").length;
+const latestLedgerDate = accountHistory.events[accountHistory.events.length - 1]?.date ?? dashboardData.as_of;
 const dongboAccount = portfolioState.accounts.find((account) => account.id === "dongbo");
 const dongboHolding = dongboAccount?.holdings[0];
 
@@ -98,12 +106,12 @@ export default function Home() {
           <nav aria-label="看板导航">
             <a href="#market">市场</a><a href="#watchlist">关注股</a><a href="#accounts">模拟仓</a><a href="#ledger">台账</a>
           </nav>
-          <div className="update-pill"><span className="live-dot" /><span>最近更新</span><strong>{shortDate} {sessionLabel}</strong></div>
+          <div className="update-pill"><span className="live-dot" /><span>最近更新</span><strong>{shortDate} {sessionDisplay}</strong></div>
         </header>
 
         <section className="overview" id="top">
           <div className="overview-copy">
-            <div className="eyebrow"><CalendarClock /> {fullDate} · {sessionLabel}</div>
+            <div className="eyebrow"><CalendarClock /> {fullDate} · {sessionDisplay}</div>
             <h1>{dashboardData.headline}</h1>
             <p>{dashboardData.summary}</p>
             <div className="brief-actions">
@@ -124,7 +132,7 @@ export default function Home() {
         </section>
 
         <section id="market" className="section-block">
-          <div className="section-heading"><div><span>01</span><h2>市场脉搏</h2></div><p>指数、成交与跨境资金的收盘快照</p></div>
+          <div className="section-heading"><div><span>01</span><h2>市场脉搏</h2></div><p>指数、成交与跨境资金的{marketSnapshotLabel}</p></div>
           <div className="indices-grid">
             {indices.map((item) => <article className="index-card" key={item.name}><span>{item.name}</span><strong>{item.value}</strong><Change value={item.change} /></article>)}
           </div>
@@ -157,7 +165,7 @@ export default function Home() {
         <section id="watchlist" className="section-block">
           <div className="section-heading"><div><span>02</span><h2>重点关注</h2></div><p>价格、成交、资金与股息率放在同一张表里</p></div>
           <div className="watch-table-wrap"><Table>
-            <TableHeader><TableRow><TableHead>股票</TableHead><TableHead>收盘 / 涨跌</TableHead><TableHead>股息率</TableHead><TableHead>成交额</TableHead><TableHead>资金观察</TableHead><TableHead>结论与原因</TableHead></TableRow></TableHeader>
+            <TableHeader><TableRow><TableHead>股票</TableHead><TableHead>{priceColumnLabel}</TableHead><TableHead>股息率</TableHead><TableHead>成交额</TableHead><TableHead>资金观察</TableHead><TableHead>结论与原因</TableHead></TableRow></TableHeader>
             <TableBody>{watchlist.map((stock) => <TableRow key={stock.code}>
               <TableCell><div className="stock-name"><strong>{stock.name}</strong><span>{stock.code}</span></div></TableCell>
               <TableCell><div className="stock-price"><strong>¥{stock.price}</strong><Change value={stock.change} /></div></TableCell>
@@ -185,8 +193,8 @@ export default function Home() {
               <div><span>当前持仓</span><strong>{dongboHolding.name} <small>{dongboHolding.symbol}</small></strong></div>
               <div><span>数量</span><strong>{dongboHolding.quantity.toLocaleString("zh-CN")} 股</strong></div>
               <div><span>含费成本</span><strong>¥{dongboHolding.average_cost.toFixed(4)}</strong></div>
-              <div><span>8月28日收盘</span><strong>¥{dongboHolding.last_price.toFixed(2)}</strong></div>
-              <div><span>累计盈亏</span><strong className="profit-number">+{formatMoney(dongboAccount.pnl)} · +{dongboAccount.pnl_pct.toFixed(2)}%</strong></div>
+              <div><span>{shortDate} {isMorningSnapshot ? "上午" : sessionLabel}</span><strong>¥{dongboHolding.last_price.toFixed(2)}</strong></div>
+              <div><span>累计盈亏</span><strong className={dongboAccount.pnl >= 0 ? "profit-number" : "loss-number"}>{formatSignedMoney(dongboAccount.pnl)} · {dongboAccount.pnl_pct >= 0 ? "+" : ""}{dongboAccount.pnl_pct.toFixed(2)}%</strong></div>
             </div>
             <div className="history-table-wrap"><Table>
               <TableHeader><TableRow><TableHead>日期</TableHead><TableHead>记录</TableHead><TableHead>标的</TableHead><TableHead>价格 / 数量</TableHead><TableHead>金额 / 费用</TableHead><TableHead>账户总资产</TableHead><TableHead>说明</TableHead></TableRow></TableHeader>
@@ -200,7 +208,7 @@ export default function Home() {
                 <TableCell><p className="history-note">{event.note}</p></TableCell>
               </TableRow>)}</TableBody>
             </Table></div>
-            <div className="history-foot"><ReceiptText /> 2026年8月13日之后未找到新增正式成交；行情更新会继续按最新价格重估这 2,500 股。</div>
+            <div className="history-foot"><ReceiptText /> 截至 {latestLedgerDate} 未找到 8月13日之后的新增正式成交；盘中行情只重估持仓，不覆盖正式历史净值。</div>
           </article> : null}
         </section>
 
@@ -210,7 +218,7 @@ export default function Home() {
           <div className="ledger-status"><div><BookOpenCheck /><span>账本状态</span><strong>已初始化</strong></div><div><CircleDollarSign /><span>现金余额</span><strong>{formatMoney(totalCash)}</strong></div><div><Landmark /><span>正式持仓</span><strong>{totalPositions}</strong></div></div>
         </section>
 
-        <footer><div><Sparkles /> 数据截至 {dashboardData.as_of} {sessionLabel} · 公开行情口径</div><p>本看板仅用于策略研究与模拟交易，不构成投资建议。</p></footer>
+        <footer><div><Sparkles /> 数据截至 {dashboardData.as_of} {sessionDisplay} · 公开行情口径</div><p>本看板仅用于策略研究与模拟交易，不构成投资建议。</p></footer>
       </div>
     </main>
   );
