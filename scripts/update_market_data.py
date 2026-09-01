@@ -12,7 +12,7 @@ import argparse
 import csv
 import json
 import math
-from datetime import datetime
+from datetime import datetime, time
 from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
@@ -140,7 +140,9 @@ def update_portfolios(stock_frame: pd.DataFrame, now: datetime) -> dict[str, Any
         for holding in holdings:
             row = rows_by_code.get(holding["symbol"])
             if row is not None:
-                holding["last_price"] = round(number(row[price_col]), 4)
+                latest_price = number(row[price_col])
+                if latest_price > 0:
+                    holding["last_price"] = round(latest_price, 4)
             holding["market_value"] = round(
                 holding["quantity"] * holding["last_price"], 2
             )
@@ -187,7 +189,13 @@ def update_portfolios(stock_frame: pd.DataFrame, now: datetime) -> dict[str, Any
     return portfolio
 
 
-def update_account_history(portfolio: dict[str, Any], now: datetime) -> None:
+def update_account_history(
+    portfolio: dict[str, Any], now: datetime, mode: str
+) -> None:
+    # Open, morning and 14:50 prices are observations, not formal daily NAV.
+    # A manual run after the 15:00 close is the only mode allowed to settle it.
+    if mode != "manual" or now.time() < time(15, 0):
+        return
     history = json.loads(HISTORY_PATH.read_text(encoding="utf-8"))
     account = next(
         item for item in portfolio["accounts"] if item["id"] == history["account_id"]
@@ -195,17 +203,20 @@ def update_account_history(portfolio: dict[str, Any], now: datetime) -> None:
     if not account.get("holdings"):
         return
     holding = account["holdings"][0]
-    valuation = next(
-        (event for event in history["events"] if event["type"] == "valuation"),
-        None,
-    )
+    valuation = next((event for event in history["events"] if (
+        event["type"] == "valuation" and event["date"] == now.date().isoformat()
+    )), None)
     if valuation is None:
         valuation = {"type": "valuation"}
         history["events"].append(valuation)
+    latest_trade = next((event for event in reversed(history["events"]) if (
+        event["type"] == "trade"
+    )), None)
+    latest_trade_date = latest_trade["date"] if latest_trade else "建仓"
     valuation.update(
         {
             "date": now.date().isoformat(),
-            "title": "最近行情估值",
+            "title": "正式收盘结算",
             "action": "持有",
             "symbol": holding["symbol"],
             "name": holding["name"],
@@ -216,7 +227,7 @@ def update_account_history(portfolio: dict[str, Any], now: datetime) -> None:
             "cash_after": account["cash"],
             "equity_after": account["equity"],
             "note": (
-                "8月13日后无新增正式成交；累计盈亏为 "
+                f"{latest_trade_date}后无新增正式成交；累计盈亏为 "
                 f"{account['pnl']:+,.2f} 元（{account['pnl_pct']:+.2f}%）。"
             ),
         }
@@ -316,6 +327,7 @@ def update_snapshot(mode: str) -> None:
     now = datetime.now(BEIJING)
     snapshot["as_of"] = now.date().isoformat()
     snapshot["session"] = mode
+    snapshot["session_time"] = now.strftime("%H:%M")
     snapshot["timezone"] = "Asia/Shanghai"
     snapshot["generated_at"] = now.isoformat(timespec="seconds")
     DASHBOARD_PATH.write_text(
@@ -323,7 +335,7 @@ def update_snapshot(mode: str) -> None:
         encoding="utf-8",
     )
     portfolio = update_portfolios(stock_frame, now)
-    update_account_history(portfolio, now)
+    update_account_history(portfolio, now, mode)
     print(f"Updated {DASHBOARD_PATH} for {mode} at {now.isoformat()}")
 
 
