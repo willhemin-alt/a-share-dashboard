@@ -225,6 +225,7 @@ nav a:hover { color: var(--cyan); }
 .holding-strip strong { font-size: 12px; font-weight: 560; }
 .holding-strip strong small { color: #607976; font-family: ui-monospace, monospace; font-size: 8px; }
 .profit-number { color: var(--red); }
+.loss-number { color: var(--cyan); }
 .history-table-wrap { overflow: hidden; }
 .history-table-wrap table { min-width: 1040px; }
 .history-table-wrap th { height: 40px; padding: 0 14px; color: #607976; background: rgba(255,255,255,.012); font-size: 8px; border-color: var(--line); }
