@@ -13,6 +13,13 @@ on:
           - open-check
           - luxembourg-morning
           - close-decision
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/daily-market-update.yml"
+      - "requirements.txt"
+      - "scripts/update_market_data.py"
   schedule:
     - cron: "35 1 * * 1-5"
     - cron: "0 4,5 * * 1-5"
@@ -36,8 +43,8 @@ jobs:
         id: mode
         shell: bash
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "value=${{ inputs.mode }}" >> "$GITHUB_OUTPUT"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.event_name }}" == "push" ]]; then
+            echo "value=manual" >> "$GITHUB_OUTPUT"
             echo "guard=" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event.schedule }}" == "35 1 * * 1-5" ]]; then
             echo "value=open-check" >> "$GITHUB_OUTPUT"
