@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-09-03T09:48:24+08:00",
+  "updated_at": "2026-09-03T12:00:28+08:00",
   "currency": "CNY",
   "accounts": [
     {
@@ -23,10 +23,10 @@
       "tag": "低估 / 集中 / 长期持有",
       "initial_cash": 100000.0,
       "cash": 3045.92,
-      "market_value": 103075.0,
-      "equity": 106120.92,
-      "pnl": 6120.92,
-      "pnl_pct": 6.12092,
+      "market_value": 102775.0,
+      "equity": 105820.92,
+      "pnl": 5820.92,
+      "pnl_pct": 5.82092,
       "positions": 1,
       "holdings": [
         {
@@ -35,13 +35,13 @@
           "quantity": 2500,
           "entry_price": 38.77,
           "average_cost": 38.781632,
-          "last_price": 41.23,
-          "market_value": 103075.0,
-          "unrealized_pnl": 6120.92,
+          "last_price": 41.11,
+          "market_value": 102775.0,
+          "unrealized_pnl": 5820.92,
           "entry_date": "2026-08-13"
         }
       ],
-      "next": "9月1日正式收盘净值已入历史；9月2日上午盘中估值不覆盖正式历史，继续持有招商银行。",
+      "next": "9月2日正式收盘净值已入历史；9月3日上午盘中估值不覆盖正式历史，继续持有招商银行。",
       "color": "amber"
     }
   ]
