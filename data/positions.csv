@@ -1,2 +1,2 @@
 account_id,symbol,name,quantity,average_cost,last_price,market_value,unrealized_pnl,updated_at_utc
-dongbo,600036,招商银行,2500,38.781632,41.11,102775.00,5820.92,2026-09-03T04:00:28Z
+dongbo,600036,招商银行,2500,38.781632,41.02,102550.0,5595.92,2026-09-03T06:58:25+00:00
