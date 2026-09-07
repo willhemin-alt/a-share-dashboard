@@ -139,7 +139,7 @@ export default function Home() {
           <div className="market-detail-grid">
             <article className="turnover-card feature-card">
               <div className="card-icon"><BarChart3 /></div>
-              <div><span className="card-label">全市场成交额</span><div className="big-number">{dashboardData.turnover.display} <small>{dashboardData.turnover.unit}</small></div><p><ArrowDownRight /> 较前一日 {dashboardData.turnover.change_yi >= 0 ? "放量" : "缩量"} {Math.abs(dashboardData.turnover.change_yi)} 亿元（{dashboardData.turnover.change_pct}）</p></div>
+              <div><span className="card-label">沪深成交额</span><div className="big-number">{dashboardData.turnover.display} <small>{dashboardData.turnover.unit}</small></div><p><ArrowDownRight /> 较前一日同期 {dashboardData.turnover.change_yi >= 0 ? "放量" : "缩量"} {Math.abs(dashboardData.turnover.change_yi)} 亿元（{dashboardData.turnover.change_pct}）</p></div>
               <div className="mini-bars" aria-hidden="true">{[38, 54, 47, 72, 68, 88, 76].map((height, index) => <i key={index} style={{ height: `${height}%` }} />)}</div>
             </article>
             <article className="flow-card feature-card">
