@@ -42,6 +42,8 @@ const formatMoney = (value: number) =>
   }).format(value);
 const formatSignedMoney = (value: number) =>
   `${value >= 0 ? "+" : "-"}${formatMoney(Math.abs(value))}`;
+const formatBreadth = (value: number | string) =>
+  typeof value === "number" ? value.toLocaleString("zh-CN") : value;
 
 const asOfDate = new Date(`${dashboardData.as_of}T12:00:00+08:00`);
 const fullDate = new Intl.DateTimeFormat("zh-CN", {
@@ -124,8 +126,8 @@ export default function Home() {
             <div className="gauge-score"><strong>{dashboardData.temperature.score}</strong><span>/ 100</span></div>
             <div className="gauge-track"><i style={{ width: `${dashboardData.temperature.score}%` }} /></div>
             <div className="breadth-row">
-              <div><span className="up-dot" />上涨 <strong>{dashboardData.breadth.up.toLocaleString("zh-CN")}</strong></div>
-              <div><span className="down-dot" />下跌 <strong>{dashboardData.breadth.down.toLocaleString("zh-CN")}</strong></div>
+              <div><span className="up-dot" />上涨 <strong>{formatBreadth(dashboardData.breadth.up)}</strong></div>
+              <div><span className="down-dot" />下跌 <strong>{formatBreadth(dashboardData.breadth.down)}</strong></div>
             </div>
             <div className="gauge-note"><ShieldCheck /> 仓位建议：{dashboardData.temperature.position_note}</div>
           </div>
