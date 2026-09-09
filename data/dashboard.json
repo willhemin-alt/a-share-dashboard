@@ -1,48 +1,48 @@
 {
   "as_of": "2026-09-09",
-  "session": "open-check",
-  "session_time": "09:47",
+  "session": "luxembourg-morning",
+  "session_time": "12:09",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-09-09T09:47:27+08:00",
-  "headline": "指数整体偏强，文化传媒 / AI视频热度领先。",
-  "summary": "全市场上涨 1,810 家、下跌 3,510 家。科技方向当前由文化传媒 / AI视频领跑，策略上继续区分信号与正式成交。",
+  "generated_at": "2026-09-09T12:09:46+08:00",
+  "headline": "指数冲高承压，文化传媒 / AI视频热度领先。",
+  "summary": "全市场上涨 1,832 家、下跌 3,544 家。科技方向当前由文化传媒 / AI视频领跑，策略上继续区分信号与正式成交。",
   "temperature": {
-    "score": 45,
+    "score": 42,
     "label": "偏谨慎",
     "position_note": "强势股只做确认，不追一致性高潮"
   },
   "breadth": {
-    "up": 1810,
-    "down": 3510
+    "up": 1832,
+    "down": 3544
   },
   "indices": [
     {
       "code": "000001",
       "name": "上证指数",
-      "value": "3,944.78",
-      "change": "+0.11%"
+      "value": "3,949.89",
+      "change": "+0.24%"
     },
     {
       "code": "399001",
       "name": "深证成指",
-      "value": "13,755.30",
-      "change": "+0.38%"
+      "value": "13,694.33",
+      "change": "-0.07%"
     },
     {
       "code": "399006",
       "name": "创业板指",
-      "value": "3,378.66",
-      "change": "+0.56%"
+      "value": "3,348.28",
+      "change": "-0.34%"
     },
     {
       "code": "000688",
       "name": "科创50",
-      "value": "1,600.14",
-      "change": "+0.57%"
+      "value": "1,581.49",
+      "change": "-0.60%"
     }
   ],
   "turnover": {
-    "display": "0.47",
+    "display": "1.22",
     "unit": "万亿元",
     "change_yi": 121.82,
     "change_pct": "+0.98%"
@@ -86,10 +86,10 @@
     {
       "code": "000568",
       "name": "泸州老窖",
-      "price": "77.20",
-      "change": "-0.75%",
+      "price": "77.18",
+      "change": "-0.77%",
       "dividend_yield": "7.39%",
-      "turnover": "0.80 亿",
+      "turnover": "2.62 亿",
       "flow": "白酒继续回调",
       "verdict": "观察",
       "reason": "9月8日上午报78.16元，跌1.44%；最新行情页股息率约7.39%，等待消费板块企稳。"
@@ -97,10 +97,10 @@
     {
       "code": "600036",
       "name": "招商银行",
-      "price": "40.85",
-      "change": "-0.12%",
+      "price": "41.14",
+      "change": "+0.59%",
       "dividend_yield": "4.92%",
-      "turnover": "2.55 亿",
+      "turnover": "10.15 亿",
       "flow": "银行窄幅偏弱",
       "verdict": "持有观察",
       "reason": "9月8日上午报40.98元，小幅回调；东博账户继续持有，关注息差、资产质量与分红持续性。"
@@ -108,10 +108,10 @@
     {
       "code": "600900",
       "name": "长江电力",
-      "price": "27.79",
-      "change": "-0.29%",
+      "price": "27.95",
+      "change": "+0.29%",
       "dividend_yield": "3.61%",
-      "turnover": "2.76 亿",
+      "turnover": "9.65 亿",
       "flow": "高股息方向偏弱",
       "verdict": "防守观察",
       "reason": "9月8日上午报27.73元，跌0.43%；最新行情页股息率约3.61%，防守属性仍在。"
