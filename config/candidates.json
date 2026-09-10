@@ -1,6 +1,7 @@
 {
-  "trade_date": null,
+  "trade_date": "2026-09-10",
   "market_ok": false,
-  "market_note": "No approved Yang Yongxing-style candidates yet.",
+  "market_note": "自动筛选行情接口失败：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+  "method": "automatic_market_evidence_v1",
   "candidates": []
 }
