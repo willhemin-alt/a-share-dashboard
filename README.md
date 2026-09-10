@@ -1,37 +1,55 @@
-# A股策略看板
+# A-share Dashboard
 
-一个面向个人研究的 A 股市场与模拟交易看板，集中展示：
+个人 A 股模拟账户与看板。第一阶段先把“连续账本 + 可验证分钟价格 + GitHub Actions + GitHub Pages”跑通。
 
-- 大盘指数、成交额、涨跌家数和互联互通资金口径
-- 最热科技方向及板块内部强弱
-- 泸州老窖、招商银行、长江电力的行情、成交、资金与股息率
-- 杨永兴方法模拟仓和东博老股民实验账户
-- 可追溯的信号、成交、持仓与盈亏台账
+## 当前实现
 
-## 自动更新时间
+- 初始资金 ¥100,000，起始日 2026-08-17；账本不每日重置。
+- 尾盘：读取 `config/candidates.json` 中**事先批准**的候选，使用 AKShare / 东方财富 1 分钟历史数据寻找 14:50 附近可验证价格；无价格则不成交。
+- 次日早盘：对持仓使用 09:35 附近可验证分钟价模拟卖出；无可靠价格则继续持有。
+- 100 股为一手；单股上限 35%，总仓位上限 70%。
+- 默认费用假设：佣金 0.025%（最低 ¥5）、卖出印花税 0.05%、过户费 0.001%。全部可在 `config/settings.json` 修改。
+- `docs/index.html` 为静态 Dashboard，可用 GitHub Pages 发布。
 
-GitHub Actions 在中国交易日按三类节点运行：
+## 为什么 14:50 的 Action 设置为 14:55 北京时间
 
-- 北京时间 09:35：开盘承接检查
-- 卢森堡时间 06:00：日常盘中报告（自动处理夏令时）
-- 北京时间 14:50：收盘前决策与模拟成交检查
+GitHub Actions 的 schedule 并不保证秒级准时。工作流在 06:55 UTC 触发，脚本不是拿“运行当下”的现价，而是读取当天 1 分钟历史数据并寻找 **14:50** 附近的真实分钟 K，因此即使 Action 晚几分钟启动，也不会把晚到的价格冒充 14:50。
 
-行情脚本只更新市场快照。策略信号写入 `data/signals.csv`，只有正式执行的模拟成交才写入 `data/trades.csv`，避免把“候选股票”误算成持仓。
+AKShare 的 `stock_zh_a_hist_min_em` 1 分钟数据只保留近期数据，因此每天及时落盘很重要。
 
-## 本地运行
+## 候选输入
 
-```bash
-npm ci
-npm run dev
+`config/candidates.json` 示例：
+
+```json
+{
+  "trade_date": "2026-08-31",
+  "market_ok": true,
+  "market_note": "市场赚钱效应达到隔夜超短交易标准",
+  "candidates": [
+    {
+      "code": "000878",
+      "name": "云南铜业",
+      "approved": true,
+      "reason": "涨停线索来自江西铜业；铜价与利润弹性逻辑映射，尚未涨停且量价确认"
+    }
+  ]
+}
 ```
 
-手动更新市场快照：
+第一版**故意不把杨永兴的新闻/题材推理机械化**。这是为了避免把互联网总结的固定阈值冒充其本人方法。后续第二阶段再接入自动新闻研究/候选生成模块，并保留每次推理的审计记录。
+
+## GitHub Pages
+
+仓库 `Settings → Pages → Build and deployment → Source` 选择 **GitHub Actions**。随后运行 `Deploy Pages` workflow。
+
+## 手动测试
 
 ```bash
-python -m pip install akshare pandas
-python scripts/update_market_data.py --mode manual
+pip install -r requirements.txt
+python scripts/build_dashboard.py
+python scripts/tail_buy.py
+python scripts/morning_sell.py
 ```
 
-## 数据说明
-
-行情数据来自公开市场数据接口，可能存在延迟、停牌、复权或披露口径差异。本项目仅用于策略研究与模拟交易，不构成投资建议。
+> 仅为模拟研究，不构成投资建议。

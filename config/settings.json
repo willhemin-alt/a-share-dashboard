@@ -1,0 +1,13 @@
+{
+  "initial_cash": 100000.0,
+  "max_stock_weight": 0.35,
+  "max_total_weight": 0.70,
+  "commission_rate": 0.00025,
+  "minimum_commission": 5.0,
+  "sell_stamp_tax_rate": 0.0005,
+  "transfer_fee_rate": 0.00001,
+  "buy_target_time": "14:50:00",
+  "sell_target_time": "09:35:00",
+  "sell_window_start": "09:30:00",
+  "sell_window_end": "09:40:00"
+}

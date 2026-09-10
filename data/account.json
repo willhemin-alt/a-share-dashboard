@@ -1,0 +1,10 @@
+{
+  "start_date": "2026-08-17",
+  "cash": 100000.0,
+  "realized_pnl": 0.0,
+  "positions": {},
+  "max_nav": 100000.0,
+  "max_drawdown": 0.0,
+  "completed_trades": 0,
+  "winning_trades": 0
+}
