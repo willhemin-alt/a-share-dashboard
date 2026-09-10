@@ -1,0 +1,47 @@
+name: Morning simulated sell
+
+on:
+  schedule:
+    # GitHub cron is UTC: 01:42 UTC = 09:42 Asia/Shanghai.
+    # The script reads the verified 09:35 bar within the 09:30-09:40 window.
+    - cron: "42 1 * * 1-5"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: a-share-ledger
+  cancel-in-progress: false
+
+jobs:
+  morning-sell:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Fetch verified 09:35 minute price and simulate sells
+        env:
+          TZ: Asia/Shanghai
+          PYTHONUNBUFFERED: "1"
+        run: python scripts/morning_sell.py
+      - run: python scripts/build_dashboard.py
+      - name: Persist ledger and dashboard
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/account.json data/trades.csv data/decisions.csv docs/index.html
+          if git diff --cached --quiet; then
+            echo "No ledger changes"
+          else
+            git commit -m "Record morning simulation $(TZ=Asia/Shanghai date +%F)"
+            git pull --rebase
+            git push
+          fi
