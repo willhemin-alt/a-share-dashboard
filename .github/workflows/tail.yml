@@ -5,6 +5,12 @@ on:
     # GitHub cron is UTC: 06:55 UTC = 14:55 Asia/Shanghai.
     - cron: "55 6 * * 1-5"
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/auto_select.py"
+      - "config/settings.json"
+      - ".github/workflows/tail.yml"
 
 permissions:
   contents: write
