@@ -12,5 +12,14 @@
   "sell_target_time": "09:35:00",
   "sell_window_start": "09:30:00",
   "sell_window_end": "09:40:00",
-  "max_price_distance_minutes": 5
+  "max_price_distance_minutes": 5,
+  "selection_min_breadth": 0.52,
+  "selection_min_limit_up_count": 30,
+  "selection_min_sector_limit_ups": 2,
+  "selection_min_change_pct": 1.5,
+  "selection_max_change_pct": 8.5,
+  "selection_min_turnover_pct": 0.5,
+  "selection_min_amount": 100000000,
+  "selection_max_candidates": 2,
+  "selection_sector_cooldown_days": 2
 }
