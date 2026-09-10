@@ -1,4 +1,4 @@
-name: Tail simulated buy
+name: Tail automatic selection and simulated buy
 
 on:
   schedule:
@@ -16,7 +16,7 @@ concurrency:
 jobs:
   tail-buy:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -26,21 +26,26 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Fetch verified 14:50 minute price and simulate buys
+      - name: Select candidates from current market evidence
+        env:
+          TZ: Asia/Shanghai
+          PYTHONUNBUFFERED: "1"
+        run: python scripts/auto_select.py
+      - name: Fetch verified 14:50 minute prices and simulate buys
         env:
           TZ: Asia/Shanghai
           PYTHONUNBUFFERED: "1"
         run: python scripts/tail_buy.py
       - run: python scripts/build_dashboard.py
-      - name: Persist ledger and dashboard
+      - name: Persist selection, ledger and dashboard
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/account.json data/trades.csv data/decisions.csv docs/index.html
+          git add config/candidates.json data/selection_history.json data/account.json data/trades.csv data/decisions.csv docs/index.html
           if git diff --cached --quiet; then
-            echo "No ledger changes"
+            echo "No changes"
           else
-            git commit -m "Record tail simulation $(TZ=Asia/Shanghai date +%F)"
+            git commit -m "Run automatic tail strategy $(TZ=Asia/Shanghai date +%F)"
             git pull --rebase
             git push
           fi
