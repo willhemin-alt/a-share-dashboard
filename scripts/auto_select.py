@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import time
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -38,11 +39,23 @@ def main():
         fail(date, "北京时间为周末，主动空仓")
         return
 
-    try:
-        spot = ak.stock_zh_a_spot_em()
-        limits = ak.stock_zt_pool_em(date=compact)
-    except Exception as exc:
-        fail(date, f"自动筛选行情接口失败：{type(exc).__name__}: {exc}")
+    spot = None
+    limits = None
+    errors = []
+    for attempt in range(1, 4):
+        try:
+            if spot is None or spot.empty:
+                spot = ak.stock_zh_a_spot_em()
+            if limits is None or limits.empty:
+                limits = ak.stock_zt_pool_em(date=compact)
+            if spot is not None and not spot.empty and limits is not None and not limits.empty:
+                break
+        except Exception as exc:
+            errors.append(f"第{attempt}次：{type(exc).__name__}: {exc}")
+        if attempt < 3:
+            time.sleep(10)
+    if spot is None or spot.empty or limits is None or limits.empty:
+        fail(date, "自动筛选行情接口连续3次失败：" + " | ".join(errors))
         return
     required_spot = {"代码", "名称", "涨跌幅", "成交额", "换手率", "总市值"}
     if spot is None or spot.empty or not required_spot.issubset(spot.columns):
