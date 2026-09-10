@@ -2,3 +2,4 @@ date,stage,market_ok,selected_codes,note
 2026-09-10,tail,False,,No approved Yang Yongxing-style candidates yet.; candidate date None does not equal Beijing trade date 2026-09-10; skipped
 2026-09-10,morning,,,No open positions
 2026-09-10,tail,False,,"自动筛选行情接口失败：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')); market filter not approved; skipped"
+2026-09-10,tail,False,,"自动筛选行情接口连续3次失败：第1次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第2次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第3次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')); market filter not approved; skipped"

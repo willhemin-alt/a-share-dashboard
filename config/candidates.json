@@ -1,7 +1,7 @@
 {
   "trade_date": "2026-09-10",
   "market_ok": false,
-  "market_note": "自动筛选行情接口失败：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
+  "market_note": "自动筛选行情接口连续3次失败：第1次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第2次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第3次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
   "method": "automatic_market_evidence_v1",
   "candidates": []
 }
