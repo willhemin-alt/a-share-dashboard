@@ -7,7 +7,10 @@
   "sell_stamp_tax_rate": 0.0005,
   "transfer_fee_rate": 0.00001,
   "buy_target_time": "14:50:00",
+  "buy_window_start": "14:48:00",
+  "buy_window_end": "14:52:00",
   "sell_target_time": "09:35:00",
   "sell_window_start": "09:30:00",
-  "sell_window_end": "09:40:00"
+  "sell_window_end": "09:40:00",
+  "max_price_distance_minutes": 5
 }
