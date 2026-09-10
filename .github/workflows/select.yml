@@ -1,0 +1,51 @@
+name: Automatic stock selection
+
+on:
+  schedule:
+    # 06:40 UTC = 14:40 Asia/Shanghai; lock candidates before 14:50.
+    - cron: "40 6 * * 1-5"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "scripts/auto_select.py"
+      - "config/settings.json"
+      - ".github/workflows/select.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: a-share-ledger
+  cancel-in-progress: false
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Select and lock candidates from current market evidence
+        env:
+          TZ: Asia/Shanghai
+          PYTHONUNBUFFERED: "1"
+        run: python scripts/auto_select.py
+      - name: Persist auditable selection
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add config/candidates.json data/selection_history.json
+          if git diff --cached --quiet; then
+            echo "No selection changes"
+          else
+            git commit -m "Lock automatic candidatesédé $(TZ=Asia/Shanghai date +%F)"
+            git pull --rebase
+            git push
+          fi
