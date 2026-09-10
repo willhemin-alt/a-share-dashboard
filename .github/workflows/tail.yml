@@ -1,16 +1,10 @@
-name: Tail automatic selection and simulated buy
+name: Tail simulated buy
 
 on:
   schedule:
     # GitHub cron is UTC: 06:55 UTC = 14:55 Asia/Shanghai.
     - cron: "55 6 * * 1-5"
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - "scripts/auto_select.py"
-      - "config/settings.json"
-      - ".github/workflows/tail.yml"
 
 permissions:
   contents: write
@@ -32,22 +26,17 @@ jobs:
           python-version: "3.11"
           cache: pip
       - run: pip install -r requirements.txt
-      - name: Select candidates from current market evidence
-        env:
-          TZ: Asia/Shanghai
-          PYTHONUNBUFFERED: "1"
-        run: python scripts/auto_select.py
       - name: Fetch verified 14:50 minute prices and simulate buys
         env:
           TZ: Asia/Shanghai
           PYTHONUNBUFFERED: "1"
         run: python scripts/tail_buy.py
       - run: python scripts/build_dashboard.py
-      - name: Persist selection, ledger and dashboard
+      - name: Persist ledger and dashboard
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add config/candidates.json data/selection_history.json data/account.json data/trades.csv data/decisions.csv docs/index.html
+          git add data/account.json data/trades.csv data/decisions.csv docs/index.html
           if git diff --cached --quiet; then
             echo "No changes"
           else
