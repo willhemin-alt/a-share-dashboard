@@ -15,3 +15,4 @@ date,stage,market_ok,selected_codes,note
 2026-09-17,tail,False,,"自动筛选行情接口连续3次失败：第1次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第2次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第3次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')); market filter not approved; skipped"
 2026-09-18,morning,,,No open positions
 2026-09-18,tail,False,,"自动筛选行情接口连续3次失败：第1次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第2次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')) | 第3次：ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response')); market filter not approved; skipped"
+2026-09-21,morning,,,No open positions
