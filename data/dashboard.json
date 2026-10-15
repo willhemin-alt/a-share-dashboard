@@ -1,48 +1,48 @@
 {
   "as_of": "2026-10-15",
-  "session": "open-check",
-  "session_time": "14:24",
+  "session": "close-decision",
+  "session_time": "20:10",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-10-15T14:24:05+08:00",
+  "generated_at": "2026-10-15T20:10:42+08:00",
   "headline": "指数冲高承压，存储芯片热度领先。",
-  "summary": "全市场上涨 358 家、下跌 5,188 家。科技方向当前由存储芯片领跑，策略上继续区分信号与正式成交。",
+  "summary": "全市场上涨 429 家、下跌 5,108 家。科技方向当前由存储芯片领跑，策略上继续区分信号与正式成交。",
   "temperature": {
-    "score": 20,
+    "score": 23,
     "label": "偏谨慎",
     "position_note": "强势股只做确认，不追一致性高潮"
   },
   "breadth": {
-    "up": 358,
-    "down": 5188
+    "up": 429,
+    "down": 5108
   },
   "indices": [
     {
       "code": "000001",
       "name": "上证指数",
-      "value": "3,680.21",
-      "change": "-2.31%"
+      "value": "3,707.48",
+      "change": "-1.59%"
     },
     {
       "code": "399001",
       "name": "深证成指",
-      "value": "11,725.47",
-      "change": "-3.18%"
+      "value": "11,816.79",
+      "change": "-2.43%"
     },
     {
       "code": "399006",
       "name": "创业板指",
-      "value": "2,754.54",
-      "change": "-3.92%"
+      "value": "2,783.18",
+      "change": "-2.92%"
     },
     {
       "code": "000688",
       "name": "科创50",
-      "value": "1,331.52",
-      "change": "-3.53%"
+      "value": "1,359.52",
+      "change": "-1.50%"
     }
   ],
   "turnover": {
-    "display": "1.38",
+    "display": "1.65",
     "unit": "万亿元",
     "change_yi": -38.34,
     "change_pct": "-0.34%"
@@ -86,10 +86,10 @@
     {
       "code": "000568",
       "name": "泸州老窖",
-      "price": "70.56",
-      "change": "+0.37%",
+      "price": "71.37",
+      "change": "+1.52%",
       "dividend_yield": "7.92%",
-      "turnover": "11.56 亿",
+      "turnover": "13.03 亿",
       "flow": "白酒震荡偏弱",
       "verdict": "观察",
       "reason": "午间报72.90元，跌0.79%；最新可得股息率约7.92%，成交额约2.69亿元。"
@@ -97,10 +97,10 @@
     {
       "code": "600036",
       "name": "招商银行",
-      "price": "42.38",
-      "change": "-0.68%",
+      "price": "42.66",
+      "change": "-0.02%",
       "dividend_yield": "4.90%",
-      "turnover": "28.83 亿",
+      "turnover": "40.44 亿",
       "flow": "银行方向承压",
       "verdict": "持有观察",
       "reason": "午间报41.11元，跌1.72%；东博账户继续持有，最新可得股息率约4.90%。"
@@ -108,10 +108,10 @@
     {
       "code": "600900",
       "name": "长江电力",
-      "price": "29.45",
-      "change": "+0.00%",
+      "price": "29.60",
+      "change": "+0.51%",
       "dividend_yield": "3.51%",
-      "turnover": "30.57 亿",
+      "turnover": "40.72 亿",
       "flow": "电力小幅回落",
       "verdict": "防守观察",
       "reason": "午间报28.50元，跌0.45%；最新可得股息率约3.51%，防守属性保持稳定。"
