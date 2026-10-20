@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-20T14:32:16+08:00",
+  "updated_at": "2026-10-20T20:16:27+08:00",
   "currency": "CNY",
   "accounts": [
     {
@@ -23,10 +23,10 @@
       "tag": "低估 / 集中 / 长期持有",
       "initial_cash": 100000.0,
       "cash": 3045.92,
-      "market_value": 105800.0,
-      "equity": 108845.92,
-      "pnl": 8845.92,
-      "pnl_pct": 8.84592,
+      "market_value": 106300.0,
+      "equity": 109345.92,
+      "pnl": 9345.92,
+      "pnl_pct": 9.34592,
       "positions": 1,
       "holdings": [
         {
@@ -35,9 +35,9 @@
           "quantity": 2500,
           "entry_price": 38.77,
           "average_cost": 38.781632,
-          "last_price": 42.32,
-          "market_value": 105800.0,
-          "unrealized_pnl": 8845.92,
+          "last_price": 42.52,
+          "market_value": 106300.0,
+          "unrealized_pnl": 9345.92,
           "entry_date": "2026-08-13"
         }
       ],
