@@ -28,11 +28,19 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: a-share-ledger
+  cancel-in-progress: false
+
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -42,8 +50,13 @@ jobs:
       - name: Resolve update mode
         id: mode
         shell: bash
+        env:
+          REQUESTED_MODE: ${{ inputs.mode }}
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" || "${{ github.event_name }}" == "push" ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "value=${REQUESTED_MODE:-manual}" >> "$GITHUB_OUTPUT"
+            echo "guard=" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
             echo "value=manual" >> "$GITHUB_OUTPUT"
             echo "guard=" >> "$GITHUB_OUTPUT"
           elif [[ "${{ github.event.schedule }}" == "35 1 * * 1-5" ]]; then
@@ -69,4 +82,5 @@ jobs:
           git config user.email "a-share-dashboard-bot@users.noreply.github.com"
           git add data/
           git commit -m "data: update A-share snapshot"
+          git pull --rebase origin main
           git push

@@ -310,7 +310,9 @@ def fetch_market_frames() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, str
     for attempt in range(1, 3):
         try:
             stock_frame = ak.stock_zh_a_spot_em()
-            index_frame = ak.stock_zh_index_spot_em()
+            # The default only contains Shanghai indices, not Shenzhen/ChiNext.
+            index_frame = ak.stock_zh_index_spot_em(symbol="沪深重要指数")
+            update_indices({"indices": [{"name": name} for name in INDEX_NAMES]}, index_frame)
             board_frame = ak.stock_board_concept_name_em()
             return stock_frame, index_frame, board_frame, "东方财富"
         except Exception as exc:
@@ -323,6 +325,7 @@ def fetch_market_frames() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, str
         print("Switching to Sina market data fallback.")
         stock_frame = ak.stock_zh_a_spot()
         index_frame = ak.stock_zh_index_spot_sina()
+        update_indices({"indices": [{"name": name} for name in INDEX_NAMES]}, index_frame)
         return stock_frame, index_frame, pd.DataFrame(), "新浪财经（备用源）"
     except Exception as exc:
         last_error = exc
