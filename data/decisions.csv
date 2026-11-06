@@ -83,3 +83,4 @@ date,stage,market_ok,selected_codes,note
 2026-11-05,morning,,,No open positions
 2026-11-05,tail,False,,自动筛选行情接口连续3次失败：第1次：Push2RateLimitError: 东方财富 push2 行情服务器断开了连接，通常是短时间内请求过多，当前 IP 被临时限流。首次限流一般约 5 分钟后恢复，反复触发后可能需要 40 分钟以上；等待期间不要重复调用东方财富的行情接口，否则会延长限流。 | 第2次：Push2RateLimitError: 东方财富 push2 行情服务器断开了连接，通常是短时间内请求过多，当前 IP 被临时限流。首次限流一般约 5 分钟后恢复，反复触发后可能需要 40 分钟以上；等待期间不要重复调用东方财富的行情接口，否则会延长限流。 | 第3次：Push2RateLimitError: 东方财富 push2 行情服务器断开了连接，通常是短时间内请求过多，当前 IP 被临时限流。首次限流一般约 5 分钟后恢复，反复触发后可能需要 40 分钟以上；等待期间不要重复调用东方财富的行情接口，否则会延长限流。; candidate date '2026-11-04' does not equal Beijing trade date 2026-11-05; skipped
 2026-11-06,morning,,,No open positions
+2026-11-06,tail,False,,市场通过，但没有形成至少2只涨停的同行业线索; candidate date '2026-11-05' does not equal Beijing trade date 2026-11-06; skipped
