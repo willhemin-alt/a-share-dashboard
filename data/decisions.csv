@@ -85,3 +85,4 @@ date,stage,market_ok,selected_codes,note
 2026-11-06,morning,,,No open positions
 2026-11-06,tail,False,,市场通过，但没有形成至少2只涨停的同行业线索; candidate date '2026-11-05' does not equal Beijing trade date 2026-11-06; skipped
 2026-11-09,morning,,,No open positions
+2026-11-10,tail,False,,市场过滤未通过：上涨2242家、下跌3148家、上涨占比41.6%、涨停54只; market filter not approved; skipped
