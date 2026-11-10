@@ -1,7 +1,7 @@
 {
   "trade_date": "2026-11-10",
   "market_ok": false,
-  "market_note": "市场过滤未通过：上涨2242家、下跌3148家、上涨占比41.6%、涨停54只",
+  "market_note": "市场通过，但没有形成至少2只涨停的同行业线索",
   "method": "automatic_market_evidence_v1",
   "candidates": []
 }
