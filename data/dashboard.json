@@ -1,19 +1,19 @@
 {
   "as_of": "2026-11-11",
-  "session": "open-check",
-  "session_time": "16:21",
+  "session": "close-decision",
+  "session_time": "22:44",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-11-11T16:21:57+08:00",
+  "generated_at": "2026-11-11T22:44:45+08:00",
   "headline": "指数整体偏强，光通信模块热度领先。",
-  "summary": "全市场上涨 3,538 家、下跌 1,827 家。科技方向当前由光通信模块领跑，策略上继续区分信号与正式成交。",
+  "summary": "全市场上涨 3,232 家、下跌 1,581 家。科技方向当前由光通信模块领跑，策略上继续区分信号与正式成交。",
   "temperature": {
     "score": 65,
     "label": "偏积极",
     "position_note": "顺势但控制单笔仓位"
   },
   "breadth": {
-    "up": 3538,
-    "down": 1827
+    "up": 3232,
+    "down": 1581
   },
   "indices": [
     {
@@ -38,11 +38,11 @@
       "code": "000688",
       "name": "科创50",
       "value": "1,300.38",
-      "change": "+2.80%"
+      "change": "+2.79%"
     }
   ],
   "turnover": {
-    "display": "1.69",
+    "display": "1.60",
     "unit": "万亿元",
     "change_yi": -38.34,
     "change_pct": "-0.34%"
@@ -123,6 +123,6 @@
     "东方财富行情：全市场涨跌家数、概念涨幅与行业主力资金流向",
     "Google Finance / 腾讯行情：三只重点关注股最新可得股息率"
   ],
-  "data_source": "东方财富",
-  "tech_data_status": "已更新"
+  "data_source": "新浪财经（备用源）",
+  "tech_data_status": "备用源不含板块数据，沿用上一版"
 }
